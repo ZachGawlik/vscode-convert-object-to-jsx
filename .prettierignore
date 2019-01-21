@@ -1,0 +1,10 @@
+# Deny all files by default
+*.js
+*.ts
+*.json
+
+# Allow specific files
+!README.md
+
+# Allow specific directories
+!src/**/*.ts
