@@ -27,13 +27,15 @@
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
 		"postinstall": "node ./node_modules/vscode/bin/install",
-		"test": "yarn run compile && node ./node_modules/vscode/bin/test",
+		"test": "yarn run jest",
 		"format": "yarn run prettier 'src/**/*.ts' README.md --write"
 	},
 	"devDependencies": {
-		"@types/mocha": "^2.2.42",
+		"@types/jest": "^23.3.13",
 		"@types/node": "^8.10.25",
+		"jest": "^23.6.0",
 		"prettier": "^1.16.0",
+		"ts-jest": "^23.10.5",
 		"tslint": "^5.8.0",
 		"tslint-config-prettier": "^1.17.0",
 		"tslint-plugin-prettier": "^2.0.1",
