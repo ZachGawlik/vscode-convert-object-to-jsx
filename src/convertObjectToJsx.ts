@@ -56,19 +56,19 @@ const getEntries = (text: string) => {
   }
 }
 
-const jsxifyEntry = (line: string) => {
-  if (line.trimLeft().indexOf('...') === 0) {
-    return `${getBeginningWhitespace(line)}{${cleanUpTrailingComma(
-      line.trim()
-    )}}${getEndingWhitespace(line)}`
+const jsxifyEntry = (entry: string) => {
+  if (entry.trimLeft().indexOf('...') === 0) {
+    return `${getBeginningWhitespace(entry)}{${cleanUpTrailingComma(
+      entry.trim()
+    )}}${getEndingWhitespace(entry)}`
   }
 
-  const separatorIndex = line.indexOf(':')
-  const key = line.slice(0, separatorIndex)
-  const value = line.slice(separatorIndex + 1)
+  const separatorIndex = entry.indexOf(':')
+  const key = entry.slice(0, separatorIndex)
+  const value = entry.slice(separatorIndex + 1)
 
   if (separatorIndex === -1 || !key.trim() || !value.trim()) {
-    return line
+    return entry
   }
 
   return `${getBeginningWhitespace(key)}${key.trim()}=${wrapPropValue(
