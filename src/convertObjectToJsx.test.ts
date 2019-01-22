@@ -76,22 +76,78 @@ describe('convertObjectToJsx', () => {
         `)
     })
 
-    test.skip('Handles values with multiline objects', () => {
+    test('Handles values with multiline objects', () => {
       expect(
         convertObjectToJsx(`
-          nestedObj: {
+          data: {
+            a: 'a',
+            b: 1,
+            c
+          }
+        `)
+      ).toEqual(`
+          data={{
+            a: 'a',
+            b: 1,
+            c
+          }}
+        `)
+
+      expect(
+        convertObjectToJsx(`
+          data: {
             a: 'a',
             b: 1,
             c
           },
+          otherProp: 'hello'
         `)
       ).toEqual(`
-          nestedObj={{
+          data={{
             a: 'a',
             b: 1,
             c
-          }},
+          }}
+          otherProp="hello"
         `)
+    })
+
+    test('Handles values with multiline nested objects', () => {
+      expect(
+        convertObjectToJsx(`
+          greeting: \`Hello \${name}\`,
+          data: {
+            a: {b: {c: 1}},
+            meta: {
+              x: 'x',
+              y: {
+                z: '{}'
+              }
+            },
+            g
+          },
+        `)
+      ).toEqual(`
+          greeting={\`Hello \${name}\`}
+          data={{
+            a: {b: {c: 1}},
+            meta: {
+              x: 'x',
+              y: {
+                z: '{}'
+              }
+            },
+            g
+          }}
+        `)
+    })
+  })
+
+  describe('multiline selections', () => {
+    it('preserves leading/trailing new lines and whitespace', () => {
+      expect(convertObjectToJsx('\n\n  data: 123\n\n\n')).toEqual(
+        '\n\n  data={123}\n\n\n'
+      )
     })
   })
 })

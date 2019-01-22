@@ -35,24 +35,58 @@ const wrapPropValue = (originalValue: string, trimmedString: string) => {
   return `{${beginningWhitespace}${trimmedString}}`
 }
 
+const getEntries = (text: string) => {
+  const keyIndentation = getBeginningWhitespace(text).length
+  const leftmostIndentedKey = new RegExp(`\\n {${keyIndentation}}\\w+:`, 'g')
+
+  const entries = []
+  let textToSearch = text
+  while (true) {
+    const nextKeyIndex = textToSearch.slice(1).search(leftmostIndentedKey) + 1
+
+    if (nextKeyIndex === 0) {
+      entries.push(textToSearch.trimRight())
+      return entries
+    }
+    entries.push(textToSearch.slice(0, nextKeyIndex))
+    textToSearch = textToSearch.slice(nextKeyIndex)
+  }
+}
+
+const jsxifyEntry = (line: string) => {
+  const separatorIndex = line.indexOf(':')
+  const key = line.slice(0, separatorIndex)
+  const value = line.slice(separatorIndex + 1)
+
+  if (!key.trim() || !value.trim()) {
+    return line
+  }
+
+  return `${getBeginningWhitespace(key)}${key.trim()}=${wrapPropValue(
+    value,
+    cleanUpTrailingComma(value.trim())
+  )}${getEndingWhitespace(value)}`
+}
+
+const repeatNewline = (num: number) => {
+  let str = ''
+  for (let i = 0; i < num; i++) {
+    str += '\n'
+  }
+  return str
+}
+
 const convert = (text: string) => {
-  return text
-    .split(',\n')
-    .map(line => {
-      const separatorIndex = line.indexOf(':')
-      const key = line.slice(0, separatorIndex)
-      const value = line.slice(separatorIndex + 1)
+  let firstNotNewLineChar = 0
+  while (text[firstNotNewLineChar] === '\n') {
+    firstNotNewLineChar += 1
+  }
 
-      if (!key.trim() || !value.trim()) {
-        return line
-      }
+  const objectEntries = getEntries(text.slice(firstNotNewLineChar))
 
-      return `${getBeginningWhitespace(key)}${key.trim()}=${wrapPropValue(
-        value,
-        cleanUpTrailingComma(value.trim())
-      )}${getEndingWhitespace(value)}`
-    })
-    .join('\n')
+  return `${repeatNewline(firstNotNewLineChar)}${objectEntries
+    .map(jsxifyEntry)
+    .join('')}${getEndingWhitespace(text)}`
 }
 
 export default convert
