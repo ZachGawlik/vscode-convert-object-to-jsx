@@ -37,7 +37,10 @@ const wrapPropValue = (originalValue: string, trimmedString: string) => {
 
 const getEntries = (text: string) => {
   const keyIndentation = getBeginningWhitespace(text).length
-  const leftmostIndentedKey = new RegExp(`\\n {${keyIndentation}}\\w+:`, 'g')
+  const leftmostIndentedKey = new RegExp(
+    `(\\n {${keyIndentation}}\\w+:|\\n {${keyIndentation}}\\.\\.\\.\\w+$)`,
+    'g'
+  )
 
   const entries = []
   let textToSearch = text
@@ -54,11 +57,17 @@ const getEntries = (text: string) => {
 }
 
 const jsxifyEntry = (line: string) => {
+  if (line.trimLeft().indexOf('...') === 0) {
+    return `${getBeginningWhitespace(line)}{${cleanUpTrailingComma(
+      line.trim()
+    )}}${getEndingWhitespace(line)}`
+  }
+
   const separatorIndex = line.indexOf(':')
   const key = line.slice(0, separatorIndex)
   const value = line.slice(separatorIndex + 1)
 
-  if (!key.trim() || !value.trim()) {
+  if (separatorIndex === -1 || !key.trim() || !value.trim()) {
     return line
   }
 
