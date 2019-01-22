@@ -43,6 +43,9 @@ describe('convertObjectToJsx', () => {
     })
 
     test('Converts object spread', () => {
+      expect(convertObjectToJsx('  a:1,\n  ...rest,\n  b:2')).toEqual(
+        `  a={1}\n  {...rest}\n  b={2}`
+      )
       expect(convertObjectToJsx('  a:1,\n  ...rest')).toEqual(
         `  a={1}\n  {...rest}`
       )
@@ -51,10 +54,15 @@ describe('convertObjectToJsx', () => {
       )
     })
 
-    test.skip('Converts from object shorthand', () => {
-      expect(convertObjectToJsx('a,\n b:b')).toEqual(`a="a"\nb="b"`)
-      expect(convertObjectToJsx('a:a,\n b')).toEqual(`a="a"\nb="b"`)
-      expect(convertObjectToJsx('a:a,\n b\n')).toEqual(`a="a"\nb="b"`)
+    test('Converts from object shorthand', () => {
+      expect(convertObjectToJsx('  a,\n  b:b')).toEqual(`  a={a}\n  b={b}`)
+      expect(convertObjectToJsx('  a:a,\n  b')).toEqual(`  a={a}\n  b={b}`)
+      expect(convertObjectToJsx('  a,\n  b,\n  c')).toEqual(
+        `  a={a}\n  b={b}\n  c={c}`
+      )
+      expect(convertObjectToJsx('  x: "x",\n  a,\n  b')).toEqual(
+        `  x="x"\n  a={a}\n  b={b}`
+      )
     })
   })
 

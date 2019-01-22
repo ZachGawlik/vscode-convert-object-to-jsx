@@ -35,12 +35,28 @@ const wrapPropValue = (originalValue: string, trimmedString: string) => {
   return `{${beginningWhitespace}${trimmedString}}`
 }
 
-const getEntries = (text: string) => {
-  const keyIndentation = getBeginningWhitespace(text).length
-  const leftmostIndentedKey = new RegExp(
-    `(\\n {${keyIndentation}}\\w+:|\\n {${keyIndentation}}\\.\\.\\.\\w+$)`,
+// TODO: might make it easier if I normalized by putting ,\n after final entry
+const getEntryStartRegex = (keyIndentation: number) => {
+  const standardKeyRegex = `\\n {${keyIndentation}}\\w+:`
+  const spreadRegex = `\\n {${keyIndentation}}\\.\\.\\.\\w+,\n`
+  const shorthandPropRegex = `\\n {${keyIndentation}}\\w+,\n`
+  return new RegExp(
+    `(${standardKeyRegex}|${spreadRegex}|${shorthandPropRegex})`,
     'g'
   )
+}
+
+// Let's us use `,\n` even on the final entry
+const sanitizeText = (text: string) => {
+  const sanitizedText = text.trimRight()
+  return sanitizedText[sanitizedText.length - 1] === ','
+    ? `${sanitizedText}\n`
+    : `${sanitizedText},\n`
+}
+
+const getEntries = (text: string) => {
+  const keyIndentation = getBeginningWhitespace(text).length
+  const leftmostIndentedKey = getEntryStartRegex(keyIndentation)
 
   const entries = []
   let textToSearch = text
@@ -64,12 +80,16 @@ const jsxifyEntry = (entry: string) => {
   }
 
   const separatorIndex = entry.indexOf(':')
+
+  if (separatorIndex === -1) {
+    const shorthandPropName = cleanUpTrailingComma(entry.trim())
+    return `${getBeginningWhitespace(
+      entry
+    )}${shorthandPropName}={${shorthandPropName}}${getEndingWhitespace(entry)}`
+  }
+
   const key = entry.slice(0, separatorIndex)
   const value = entry.slice(separatorIndex + 1)
-
-  if (separatorIndex === -1 || !key.trim() || !value.trim()) {
-    return entry
-  }
 
   return `${getBeginningWhitespace(key)}${key.trim()}=${wrapPropValue(
     value,
@@ -91,7 +111,10 @@ const convert = (text: string) => {
     firstNotNewLineChar += 1
   }
 
-  const objectEntries = getEntries(text.slice(firstNotNewLineChar))
+  // TODO: cleanup
+  const objectEntries = getEntries(
+    sanitizeText(text.slice(firstNotNewLineChar))
+  )
 
   return `${repeatNewline(firstNotNewLineChar)}${objectEntries
     .map(jsxifyEntry)
