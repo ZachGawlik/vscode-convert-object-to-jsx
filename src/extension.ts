@@ -8,8 +8,9 @@ const positionFactory = (positionObj: any) => {
 }
 
 const rangeFactory = (selection: any, length: any) => {
+  selection.start._character = 0
+
   if (length === 0) {
-    selection.start._character = 0
     selection.end._character = vscode.window.activeTextEditor!.document.lineAt(
       selection.start.line
     ).text.length
