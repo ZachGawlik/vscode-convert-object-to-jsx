@@ -1,35 +1,55 @@
 {
 	"name": "convert-object-to-jsx",
-	"displayName": "convert-object-to-jsx",
-	"description": "Convert between object entries and jsx props in VSCode",
+	"displayName": "Convert Object to JSX",
+	"description": "Convert between object entry and jsx prop formats",
 	"publisher": "zachgawlik",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"engines": {
 		"vscode": "^1.30.0"
 	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/ZachGawlik/vscode-convert-object-to-jsx"
-	},
 	"keywords": [
-		"vscode"
+		"jsx",
+		"react",
+		"keybindings",
+		"object-to-jsx",
+		"jsx-to-object"
 	],
-	"license": "MIT",
 	"categories": [
+		"Formatters",
 		"Other"
 	],
+	"icon": "icon.png",
+	"galleryBanner": {
+		"color": "#011623",
+		"theme": "dark"
+	},
 	"activationEvents": [
 		"onCommand:extension.convertObjectToJsx"
 	],
-	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
 				"command": "extension.convertObjectToJsx",
-				"title": "Convert Object to JSX"
+				"title": "Convert Object <-> JSX"
+			}
+		],
+		"keybindings": [
+			{
+				"command": "extension.convertObjectToJsx",
+				"key": "ctrl+,",
+				"when": "editorTextFocus"
 			}
 		]
 	},
+	"main": "./out/extension.js",
+	"bugs": {
+		"url": "https://github.com/ZachGawlik/vscode-convert-object-to-jsx/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ZachGawlik/vscode-convert-object-to-jsx.git"
+	},
+	"license": "MIT",
 	"scripts": {
 		"vscode:prepublish": "yarn run compile",
 		"compile": "tsc -p ./",
