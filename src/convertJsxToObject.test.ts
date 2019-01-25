@@ -30,8 +30,8 @@ describe('convert', () => {
       expect(convert('  {...rest}')).toEqual('  ...rest,')
     })
 
-    test('Converts from object shorthand', () => {
-      expect(convert('  a={a}\n  b={b}')).toEqual(`  a: a,\n  b: b,`)
+    test('Converts to object shorthand', () => {
+      expect(convert('  a={a}\n  b={b}')).toEqual(`  a,\n  b,`)
     })
 
     test('Converts from boolean shorthand', () => {

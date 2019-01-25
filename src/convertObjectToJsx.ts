@@ -178,7 +178,8 @@ const _propToObject = (prop: string) => {
 
   const key = prop.slice(0, separatorIndex)
   const value = prop.slice(separatorIndex + 1)
-  return `${key}: ${unwrapPropValue(value.trim())},`
+  const formattedValue = unwrapPropValue(value.trim())
+  return key === formattedValue ? `${key},` : `${key}: ${formattedValue},`
 }
 
 const propToObject = (prop: string) => {
