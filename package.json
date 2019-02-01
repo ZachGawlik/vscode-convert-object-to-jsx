@@ -27,6 +27,18 @@
 		"onCommand:extension.convertObjectToJsx"
 	],
 	"contributes": {
+		"configuration": {
+			"type": "object",
+			"title": "Convert Object to JSX",
+			"properties": {
+				"convert-object-to-jsx.useJsxShorthand": {
+					"type": "boolean",
+					"default": false,
+					"description": "Instead of `prop={true}`, use `prop`",
+					"scope": "window"
+				}
+			}
+		},
 		"commands": [
 			{
 				"command": "extension.convertObjectToJsx",

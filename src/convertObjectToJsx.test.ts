@@ -17,6 +17,13 @@ describe('convertObjectToJsx', () => {
       )
     })
 
+    test('Uses jsx shorthand according to option', () => {
+      expect(convertObjectToJsx(`a: true`)).toEqual(`a={true}`)
+      expect(convertObjectToJsx(`a: true`, {useJsxShorthand: true})).toEqual(
+        `a`
+      )
+    })
+
     test('Converts template literal value', () => {
       /* tslint:disable:no-invalid-template-strings */
       expect(convertObjectToJsx('a: `string${id}`')).toEqual(

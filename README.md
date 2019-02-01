@@ -11,10 +11,14 @@ Adds a command to convert between JS object and JSX prop formats
   - bring up the command palette (cmd+shift+p on mac) and select "Convert Object <-> JSX"
   - Or use the `ctrl+,` shortcut
 
+## Configuration
+
 You can change the keyboard shortcut by opening the Keyboard Shortcuts option in the command palette and modifying the entry for `extension.convertObjectToJsx`
+
+Settings:
+
+- `"convert-object-to-jsx.useJsxShorthand"`: Instead of `prop={true}` use `prop`
 
 ## TODO:
 
-- [ ] Provide setting to turn off converting to object shorthand
-- [ ] Provide setting to turn on converting to jsx shorthand prop={true}
 - [ ] Handle converting from a single-lined object with multiple entries

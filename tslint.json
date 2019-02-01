@@ -12,7 +12,8 @@
 		"class-name": true,
 		"triple-equals": true,
 		"no-implicit-dependencies": [true, ["vscode"]],
-		"no-submodule-imports": [true, "vscode/lib/testrunner"]
+		"no-submodule-imports": [true, "vscode/lib/testrunner"],
+		"interface-over-type-literal": false
 	},
 	"defaultSeverity": "warning"
 }

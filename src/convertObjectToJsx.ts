@@ -1,3 +1,9 @@
+type Settings = {
+  useJsxShorthand?: boolean
+}
+
+let vscodeSettings: Settings
+
 const getBeginningWhitespace = (s: string) => {
   const whitespace = s.match(/^\s+/)
   return whitespace !== null ? whitespace[0] : ''
@@ -94,6 +100,10 @@ const _jsxifyEntry = (entry: string) => {
 
   const key = entry.slice(0, separatorIndex)
   const value = entry.slice(separatorIndex + 1)
+
+  if (vscodeSettings.useJsxShorthand && value === ' true') {
+    return key
+  }
 
   // value is already trimmed right.
   return `${key}=${wrapPropValue(value)}`
@@ -202,10 +212,14 @@ const _convert = (textWithoutNewlines: string) => {
   }
 }
 
-const convert = (text: string) => {
+const convert = (text: string, {useJsxShorthand = false}: Settings = {}) => {
   const [, leadingNewlines, textWithoutNewlines] = text
     .trimRight()
     .match(/^(\n*)([^]*)$/)!
+
+  vscodeSettings = {
+    useJsxShorthand,
+  }
 
   return (
     leadingNewlines + _convert(textWithoutNewlines) + getEndingWhitespace(text)

@@ -43,7 +43,14 @@ export const activate = (context: vscode.ExtensionContext) => {
       const range = rangeFactory(selection, selectedText.length)
 
       editor.edit(builder =>
-        builder.replace(range, convertObjectToJsx(convertableText))
+        builder.replace(
+          range,
+          convertObjectToJsx(convertableText, {
+            useJsxShorthand: vscode.workspace
+              .getConfiguration()
+              .get('convert-object-to-jsx.useJsxShorthand'),
+          })
+        )
       )
     }
   )
