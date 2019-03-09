@@ -18,7 +18,3 @@ You can change the keyboard shortcut by opening the Keyboard Shortcuts option in
 Settings:
 
 - `"convert-object-to-jsx.useJsxShorthand"`: Instead of `prop={true}` use `prop`
-
-## TODO:
-
-- [ ] Handle converting from a single-lined object with multiple entries

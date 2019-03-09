@@ -132,10 +132,6 @@ const isObjectFormat = (text: string) => {
   // This is the only time where we're actually matching the "first" entry
   // instead of immediately looking for the second one
   // I don't think there's a case where the index should ever not be 0.
-
-  // TODO: OMGGGGGGGGGGG this actually needs to add a `,` at the end for objs
-  //       in the case of only selecting a single field
-  // TODO: think through whether I *really* need the , for obj regex
   const textToSearch = `\n${text}\n`
 
   const firstKey = textToSearch.search(leftmostIndentedKey)
