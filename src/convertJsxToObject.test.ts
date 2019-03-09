@@ -15,6 +15,12 @@ describe('convert', () => {
       )
     })
 
+    test('Converts hyphenated prop names', () => {
+      expect(convert('data-test="purchase-button"')).toEqual(
+        `'data-test': "purchase-button",`
+      )
+    })
+
     test('Converts template literal value', () => {
       /* tslint:disable:no-invalid-template-strings */
       expect(convert('a={`string${id}`}')).toEqual('a: `string${id}`,')

@@ -40,7 +40,7 @@ const wrapPropValue = (untrimmedValue: string) => {
 }
 
 const getEntryStartRegex = (keyIndentation: number) => {
-  const standardKeyRegex = `\\n {${keyIndentation}}\\w+:`
+  const standardKeyRegex = `\\n {${keyIndentation}}[\`'"-\\w]+:`
   const spreadRegex = `\\n {${keyIndentation}}\\.\\.\\.\\w+,\n`
   const shorthandPropRegex = `\\n {${keyIndentation}}\\w+,\n`
   return new RegExp(
@@ -83,6 +83,13 @@ const getEntries = (text: string) => {
   }
 }
 
+const stripQuotesForHyphen = (key: string) =>
+  key[0] === key[key.length - 1] &&
+  ['"', "'", '`'].indexOf(key[0]) > -1 &&
+  key.indexOf('-') > -1
+    ? key.slice(1, key.length - 1)
+    : key
+
 // tslint:disable-next-line:variable-name
 const _jsxifyEntry = (entry: string) => {
   // preserves newlines between object entries
@@ -106,7 +113,7 @@ const _jsxifyEntry = (entry: string) => {
   }
 
   // value is already trimmed right.
-  return `${key}=${wrapPropValue(value)}`
+  return `${stripQuotesForHyphen(key)}=${wrapPropValue(value)}`
 }
 
 const jsxifyEntry = (untrimmedEntry: string) => {
@@ -174,6 +181,9 @@ const getProps = (text: string) => {
   }
 }
 
+const handleHyphen = (key: string) =>
+  key.indexOf('-') === -1 ? key : `'${key}'`
+
 // tslint:disable-next-line:variable-name
 const _propToObject = (prop: string) => {
   const separatorIndex = prop.indexOf('=')
@@ -183,13 +193,15 @@ const _propToObject = (prop: string) => {
       return `${prop.slice(1, prop.length - 1)},`
     }
 
-    return `${prop}: true,`
+    return `${handleHyphen(prop)}: true,`
   }
 
   const key = prop.slice(0, separatorIndex)
   const value = prop.slice(separatorIndex + 1)
   const formattedValue = unwrapPropValue(value.trim())
-  return key === formattedValue ? `${key},` : `${key}: ${formattedValue},`
+  return key === formattedValue
+    ? `${key},`
+    : `${handleHyphen(key)}: ${formattedValue},`
 }
 
 const propToObject = (prop: string) => {

@@ -17,6 +17,18 @@ describe('convertObjectToJsx', () => {
       )
     })
 
+    test('Converts hyphenated keys', () => {
+      expect(convertObjectToJsx('`data-test`: `purchase-button`')).toEqual(
+        'data-test={`purchase-button`}'
+      )
+      expect(convertObjectToJsx(`"data-test": 'purchase-button'`)).toEqual(
+        `data-test="purchase-button"`
+      )
+      expect(convertObjectToJsx(`'data-test': "purchase-button"`)).toEqual(
+        `data-test="purchase-button"`
+      )
+    })
+
     test('Uses jsx shorthand according to option', () => {
       expect(convertObjectToJsx(`a: true`)).toEqual(`a={true}`)
       expect(convertObjectToJsx(`a: true`, {useJsxShorthand: true})).toEqual(
