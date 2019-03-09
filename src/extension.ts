@@ -1,27 +1,6 @@
 import * as vscode from 'vscode'
 import convertObjectToJsx from './convertObjectToJsx'
 
-// Editor selection code credited to https://github.com/ansumanshah/css-in-js
-
-const positionFactory = (positionObj: any) => {
-  return new vscode.Position(positionObj._line, positionObj._character)
-}
-
-const rangeFactory = (selection: any, length: any) => {
-  selection.start._character = 0
-
-  if (length === 0) {
-    selection.end._character = vscode.window.activeTextEditor!.document.lineAt(
-      selection.start.line
-    ).text.length
-  }
-
-  return new vscode.Range(
-    positionFactory(selection.start),
-    positionFactory(selection.end)
-  )
-}
-
 export const activate = (context: vscode.ExtensionContext) => {
   const disposable = vscode.commands.registerCommand(
     'extension.convertObjectToJsx',
@@ -36,16 +15,20 @@ export const activate = (context: vscode.ExtensionContext) => {
         return
       }
 
-      const selection = editor.selection
-      const lineText = editor.document.lineAt(selection.start.line).text
-      const selectedText = editor.document.getText(selection)
-      const convertableText = selectedText || lineText
-      const range = rangeFactory(selection, selectedText.length)
+      const fullLineSelection = new vscode.Range(
+        new vscode.Position(editor.selection.start.line, 0),
+        new vscode.Position(
+          editor.selection.end.line,
+          vscode.window.activeTextEditor!.document.lineAt(
+            editor.selection.end.line
+          ).text.length
+        )
+      )
 
       editor.edit(builder =>
         builder.replace(
-          range,
-          convertObjectToJsx(convertableText, {
+          fullLineSelection,
+          convertObjectToJsx(editor.document.getText(fullLineSelection), {
             useJsxShorthand: vscode.workspace
               .getConfiguration()
               .get('convert-object-to-jsx.useJsxShorthand'),
