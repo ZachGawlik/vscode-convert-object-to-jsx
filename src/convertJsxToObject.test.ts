@@ -36,6 +36,25 @@ describe('convert', () => {
       expect(convert('  {...rest}')).toEqual('  ...rest,')
     })
 
+    test('Converts object spread of function calls', () => {
+      expect(
+        convert('{...myPropGetter({field1: value1, field2: value2})}')
+      ).toEqual('...myPropGetter({field1: value1, field2: value2}),')
+      expect(
+        convert(`
+        {...myPropGetter({
+          field1: value1,
+          field2: value2
+        })}
+        `)
+      ).toEqual(`
+        ...myPropGetter({
+          field1: value1,
+          field2: value2
+        }),
+        `)
+    })
+
     test('Converts to object shorthand', () => {
       expect(convert('  a={a}\n  b={b}')).toEqual(`  a,\n  b,`)
     })

@@ -70,6 +70,26 @@ describe('convertObjectToJsx', () => {
       )
     })
 
+    test('Converts object spread of function calls', () => {
+      expect(
+        convertObjectToJsx('...myPropGetter({field1: value1, field2: value2})')
+      ).toEqual('{...myPropGetter({field1: value1, field2: value2})}')
+
+      expect(
+        convertObjectToJsx(`
+        ...myPropGetter({
+          field1: value1,
+          field2: value2
+        }),
+        `)
+      ).toEqual(`
+        {...myPropGetter({
+          field1: value1,
+          field2: value2
+        })}
+        `)
+    })
+
     test('Converts from object shorthand', () => {
       expect(convertObjectToJsx('  a,\n  b:b')).toEqual(`  a={a}\n  b={b}`)
       expect(convertObjectToJsx('  a:a,\n  b')).toEqual(`  a={a}\n  b={b}`)
