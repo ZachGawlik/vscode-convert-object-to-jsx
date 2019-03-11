@@ -1,4 +1,4 @@
-type Settings = {
+export type Settings = {
   useJsxShorthand?: boolean
 }
 

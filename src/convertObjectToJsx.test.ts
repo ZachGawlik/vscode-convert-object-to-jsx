@@ -1,48 +1,65 @@
-import convert from './convertObjectToJsx'
+import convert, {Settings} from './convertObjectToJsx'
+
+const testReversibleConversion = (
+  jsxFormat: string,
+  objectFormat: string,
+  settings: Settings = {}
+): void => {
+  expect(convert(jsxFormat, settings)).toEqual(objectFormat)
+  expect(convert(objectFormat, settings)).toEqual(jsxFormat)
+}
 
 describe('convert', () => {
   describe('single-line values', () => {
     test('Converts non-string non-object primitives', () => {
+      testReversibleConversion(`a: 1,`, `a={1}`)
+      testReversibleConversion(`  a: null,\n`, `  a={null}\n`)
       expect(convert(`a: 1`)).toEqual(`a={1}`)
-      expect(convert(`a: 1,`)).toEqual(`a={1}`)
+      expect(convert(`a: 1`)).toEqual(`a={1}`)
       expect(convert(`  a: 1\n`)).toEqual(`  a={1}\n`)
-      expect(convert(`  a: null,\n`)).toEqual(`  a={null}\n`)
     })
 
     test('Converts non-template string value', () => {
+      testReversibleConversion(`a: "a",`, `a="a"`)
       expect(convert(`a: 'a'`)).toEqual(`a="a"`)
-      expect(convert(`a: "a"`)).toEqual(`a="a"`)
+      expect(convert(`a='a'`)).toEqual(`a: 'a',`)
+      expect(convert(`trickychars=" ',\\"{<}>"`)).toEqual(
+        `trickychars: " ',\\"{<}>",`
+      )
       expect(convert(`trickychars: ' \',"{<}>'`)).toEqual(
         `trickychars=" ',\\"{<}>"`
       )
     })
 
     test('Converts hyphenated keys', () => {
+      testReversibleConversion(
+        `'data-test': "purchase-button",`,
+        `data-test="purchase-button"`
+      )
       expect(convert('`data-test`: `purchase-button`')).toEqual(
         'data-test={`purchase-button`}'
       )
       expect(convert(`"data-test": 'purchase-button'`)).toEqual(
         `data-test="purchase-button"`
       )
-      expect(convert(`'data-test': "purchase-button"`)).toEqual(
-        `data-test="purchase-button"`
-      )
     })
 
     test('Uses jsx shorthand according to option', () => {
-      expect(convert(`a: true`)).toEqual(`a={true}`)
-      expect(convert(`a: true`, {useJsxShorthand: true})).toEqual(`a`)
+      testReversibleConversion(`a: true,`, `a={true}`)
+      testReversibleConversion(`a: true,`, 'a', {useJsxShorthand: true})
+      // parsing jsxShorthand does not require outputtingh to shorthand
+      expect(convert('  a\n  b')).toEqual(`  a: true,\n  b: true,`)
     })
 
     test('Converts template literal value', () => {
       /* tslint:disable:no-invalid-template-strings */
-      expect(convert('a: `string${id}`')).toEqual('a={`string${id}`}')
+      testReversibleConversion('a: `string${id}`,', 'a={`string${id}`}')
       /* tslint:enable:no-invalid-template-strings */
     })
 
     test('Converts field with an object value', () => {
-      expect(convert(`a: {z: 1}`)).toEqual(`a={{z: 1}}`)
-      expect(convert(`a: {z}`)).toEqual(`a={{z}}`)
+      testReversibleConversion(`a: {z: 1},`, `a={{z: 1}}`)
+      testReversibleConversion(`a: {z},`, `a={{z}}`)
     })
 
     test('Converts ternary value', () => {
@@ -55,73 +72,64 @@ describe('convert', () => {
     })
 
     test('Converts object spread', () => {
-      expect(convert('  a:1,\n  ...rest,\n  b:2')).toEqual(
+      testReversibleConversion('  ...rest,', '  {...rest}')
+      testReversibleConversion('  a: 1,\n  ...rest,', `  a={1}\n  {...rest}`)
+      testReversibleConversion('  ...rest,\n  a: 1,', `  {...rest}\n  a={1}`)
+      testReversibleConversion(
+        '  a: 1,\n  ...rest,\n  b: 2,',
         `  a={1}\n  {...rest}\n  b={2}`
       )
-      expect(convert('  a:1,\n  ...rest')).toEqual(`  a={1}\n  {...rest}`)
-      expect(convert('  ...rest,\n  a:1')).toEqual(`  {...rest}\n  a={1}`)
     })
 
     test('Converts object spread of function calls', () => {
-      expect(
-        convert('...myPropGetter({field1: value1, field2: value2})')
-      ).toEqual('{...myPropGetter({field1: value1, field2: value2})}')
+      testReversibleConversion(
+        '...myPropGetter({field1: value1, field2: value2}),',
+        '{...myPropGetter({field1: value1, field2: value2})}'
+      )
 
-      expect(
-        convert(`
+      testReversibleConversion(
+        `
         ...myPropGetter({
           field1: value1,
           field2: value2
         }),
-        `)
-      ).toEqual(`
+        `,
+        `
         {...myPropGetter({
           field1: value1,
           field2: value2
         })}
-        `)
+        `
+      )
     })
 
     test('Converts from object shorthand', () => {
-      expect(convert('  a,\n  b:b')).toEqual(`  a={a}\n  b={b}`)
-      expect(convert('  a:a,\n  b')).toEqual(`  a={a}\n  b={b}`)
-      expect(convert('  a,\n  b,\n  c')).toEqual(`  a={a}\n  b={b}\n  c={c}`)
-      expect(convert('  x: "x",\n  a,\n  b')).toEqual(
-        `  x="x"\n  a={a}\n  b={b}`
-      )
+      testReversibleConversion('  a,\n  b,', `  a={a}\n  b={b}`)
+      testReversibleConversion('  x: "x",\n  a,', `  x="x"\n  a={a}`)
     })
   })
 
   describe('multiline values', () => {
     test('converts multiline ternaries', () => {
-      expect(
-        convert(`
+      testReversibleConversion(
+        `
         fieldWithTernaryValue:
           someReallyLongConditionalCheckReallyReallyReallyLong === undefined
             ? 'option1'
             : 'option2',
-        `)
-      ).toEqual(`
+        `,
+        `
         fieldWithTernaryValue={
           someReallyLongConditionalCheckReallyReallyReallyLong === undefined
             ? 'option1'
             : 'option2'}
-        `)
-
-      expect(
-        convert(`
-        fieldWithTernaryValue:
-          someReallyLongConditionalCheckReallyReallyReallyLong === undefined ? 1 : 2,
-        `)
-      ).toEqual(`
-        fieldWithTernaryValue={
-          someReallyLongConditionalCheckReallyReallyReallyLong === undefined ? 1 : 2}
-        `)
+        `
+      )
     })
 
     test('Handles values with multiline objects', () => {
-      expect(
-        convert(`
+      testReversibleConversion(
+        `
           data: {
             a: {b: {c: 1}},
             meta: {
@@ -132,8 +140,8 @@ describe('convert', () => {
             },
             g
           },
-        `)
-      ).toEqual(`
+        `,
+        `
           data={{
             a: {b: {c: 1}},
             meta: {
@@ -144,13 +152,15 @@ describe('convert', () => {
             },
             g
           }}
-        `)
+        `
+      )
     })
   })
 
   describe('multiline selections', () => {
     it("preserves entire selection's leading and trailing whitespace", () => {
-      expect(convert('\n\n  data: 123  \n\n\n')).toEqual(
+      testReversibleConversion(
+        '\n\n  data: 123,  \n\n\n',
         '\n\n  data={123}  \n\n\n'
       )
       /* TODO: fix this case by reworking convert's leadingNewlines regex
@@ -161,7 +171,8 @@ describe('convert', () => {
     })
 
     it('preserves leading/trailing new lines between entries', () => {
-      expect(convert('\n\n  data: 123,\n\n  x,\n  y\n')).toEqual(
+      testReversibleConversion(
+        '\n\n  data: 123,\n\n  x,\n  y,\n',
         '\n\n  data={123}\n\n  x={x}\n  y={y}\n'
       )
     })
