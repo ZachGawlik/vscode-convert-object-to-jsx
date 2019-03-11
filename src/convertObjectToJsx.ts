@@ -59,7 +59,7 @@ const getPropStartRegex = (propIndentation: number) => {
   )
 }
 
-// Let's us use `,\n` even on the final entry
+// Lets us use `,\n` even on the final entry
 const sanitizeText = (text: string) => {
   return text[text.length - 1] === ',' ? `${text}\n` : `${text},\n`
 }
@@ -156,7 +156,6 @@ const unwrapPropValue = (value: string) => {
   throw new Error(
     `Prop value ${JSON.stringify(value)} is neither a string nor expression`
   )
-  return
 }
 
 const getProps = (text: string) => {
@@ -197,6 +196,8 @@ const _propToObject = (prop: string) => {
   const formattedValue = unwrapPropValue(value.trim())
   return key === formattedValue
     ? `${key},`
+    : formattedValue[0] === '\n'
+    ? `${handleHyphen(key)}:${formattedValue},`
     : `${handleHyphen(key)}: ${formattedValue},`
 }
 
