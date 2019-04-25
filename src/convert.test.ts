@@ -36,14 +36,16 @@ describe('convert', () => {
         `'data-test': "purchase-button",`,
         `data-test="purchase-button"`
       )
+      testReversibleConversion(
+        'hyphenated-boolean-attr',
+        "'hyphenated-boolean-attr': true,",
+        {useJsxShorthand: true}
+      )
       expect(convert('`data-test`: `purchase-button`')).toEqual(
         'data-test={`purchase-button`}'
       )
       expect(convert(`"data-test": 'purchase-button'`)).toEqual(
         `data-test="purchase-button"`
-      )
-      expect(convert('hyphenated-boolean-attr')).toEqual(
-        "'hyphenated-boolean-attr': true,"
       )
     })
 

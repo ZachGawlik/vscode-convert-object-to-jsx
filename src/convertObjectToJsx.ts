@@ -72,7 +72,7 @@ const _jsxifyEntry = (entry: string, useJsxShorthand: boolean) => {
   const value = entry.slice(separatorIndex + 1)
 
   if (useJsxShorthand && value === ' true') {
-    return key
+    return stripQuotesForHyphen(key)
   }
 
   // value is already trimmed right.
