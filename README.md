@@ -1,6 +1,8 @@
 # [Convert Object <-> JSX for VSCode](https://marketplace.visualstudio.com/items?itemName=zachgawlik.convert-object-to-jsx)
 
-Adds a command to convert between JS object and JSX prop formats
+Adds a command to convert between JS object and JSX prop formats.
+
+A relatively common usecase is for establishing shared props for component tests:
 
 ![Demo converting between object and jsx](./demo.gif)
 
@@ -13,7 +15,7 @@ Adds a command to convert between JS object and JSX prop formats
 
 ## Configuration
 
-You can change the keyboard shortcut by opening the Keyboard Shortcuts option in the command palette and modifying the entry for `extension.convertObjectToJsx`
+You can change the keyboard shortcut by opening the Keyboard Shortcuts option in the command palette and modifying the entry for `extension.convertObjectToJsx`.
 
 Settings:
 
