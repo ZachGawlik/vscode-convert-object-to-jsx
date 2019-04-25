@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import convertObjectToJsx from './convertObjectToJsx'
+import convert from './convert'
 
 export const activate = (context: vscode.ExtensionContext) => {
   const disposable = vscode.commands.registerCommand(
@@ -28,7 +28,7 @@ export const activate = (context: vscode.ExtensionContext) => {
       editor.edit(builder =>
         builder.replace(
           fullLineSelection,
-          convertObjectToJsx(editor.document.getText(fullLineSelection), {
+          convert(editor.document.getText(fullLineSelection), {
             useJsxShorthand: vscode.workspace
               .getConfiguration()
               .get('convert-object-to-jsx.useJsxShorthand'),

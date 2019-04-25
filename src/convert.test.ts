@@ -1,4 +1,4 @@
-import convert, {Settings} from './convertObjectToJsx'
+import convert, {Settings} from './convert'
 
 const testReversibleConversion = (
   jsxFormat: string,
