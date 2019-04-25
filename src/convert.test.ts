@@ -165,14 +165,9 @@ describe('convert', () => {
   describe('multiline selections', () => {
     it("preserves entire selection's leading and trailing whitespace", () => {
       testReversibleConversion(
-        '\n\n  data: 123,  \n\n\n',
-        '\n\n  data={123}  \n\n\n'
-      )
-      /* TODO: fix this case by reworking convert's leadingNewlines regex
-      expect(convert('  \n\n  data: 123\n\n\n')).toEqual(
+        '  \n\n  data: 123,  \n\n\n',
         '  \n\n  data={123}  \n\n\n'
       )
-      */
     })
 
     it('preserves leading/trailing new lines between entries', () => {

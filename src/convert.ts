@@ -32,7 +32,7 @@ export type Settings = {
 const convert = (text: string, {useJsxShorthand}: Settings = {}) => {
   const [, leadingNewlines, textWithoutNewlines] = text
     .trimRight()
-    .match(/^(\n*)([^]*)$/)!
+    .match(/^(\s*\n|)([^]*)$/)!
 
   return `${leadingNewlines}${
     isObjectFormat(textWithoutNewlines)
