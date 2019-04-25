@@ -62,17 +62,31 @@
 		"url": "https://github.com/ZachGawlik/vscode-convert-object-to-jsx.git"
 	},
 	"license": "MIT",
+	"husky": {
+    "hooks": {
+      "pre-commit": "yarn run test"
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
 	"scripts": {
 		"vscode:prepublish": "yarn run compile",
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
 		"postinstall": "node ./node_modules/vscode/bin/install",
 		"test": "yarn run jest",
+		"commit": "git-cz",
 		"format": "yarn run prettier 'src/**/*.ts' README.md --write"
 	},
 	"devDependencies": {
 		"@types/jest": "^23.3.13",
 		"@types/node": "^8.10.25",
+		"commitizen": "^3.1.1",
+		"cz-conventional-changelog": "^2.1.0",
+		"husky": "^2.1.0",
 		"jest": "^23.6.0",
 		"prettier": "^1.16.0",
 		"ts-jest": "^23.10.5",
@@ -82,4 +96,5 @@
 		"typescript": "^3.1.4",
 		"vscode": "^1.1.25"
 	}
+
 }
