@@ -42,6 +42,9 @@ describe('convert', () => {
       expect(convert(`"data-test": 'purchase-button'`)).toEqual(
         `data-test="purchase-button"`
       )
+      expect(convert('hyphenated-boolean-attr')).toEqual(
+        "'hyphenated-boolean-attr': true,"
+      )
     })
 
     test('Uses jsx shorthand according to option', () => {
@@ -174,6 +177,31 @@ describe('convert', () => {
       testReversibleConversion(
         '\n\n  data: 123,\n\n  x,\n  y,\n',
         '\n\n  data={123}\n\n  x={x}\n  y={y}\n'
+      )
+    })
+  })
+
+  describe('invalid selections', () => {
+    it('throws for component included', () => {
+      expect(() =>
+        convert(`
+        <MyComponent
+          prop1={value1}
+        />
+      `)
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"The first line of the selected code is not recognized to be an object entry nor jsx prop"`
+      )
+    })
+    it('throws for object braces included', () => {
+      expect(() =>
+        convert(`
+        {
+          key1: value1
+        }
+      `)
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"The first line of the selected code is not recognized to be an object entry nor jsx prop"`
       )
     })
   })

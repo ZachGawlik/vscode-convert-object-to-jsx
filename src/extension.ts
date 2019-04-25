@@ -25,16 +25,16 @@ export const activate = (context: vscode.ExtensionContext) => {
         )
       )
 
-      editor.edit(builder =>
-        builder.replace(
-          fullLineSelection,
-          convert(editor.document.getText(fullLineSelection), {
-            useJsxShorthand: vscode.workspace
-              .getConfiguration()
-              .get('convert-object-to-jsx.useJsxShorthand'),
-          })
-        )
-      )
+      try {
+        const converted = convert(editor.document.getText(fullLineSelection), {
+          useJsxShorthand: vscode.workspace
+            .getConfiguration()
+            .get('convert-object-to-jsx.useJsxShorthand'),
+        })
+        editor.edit(builder => builder.replace(fullLineSelection, converted))
+      } catch (e) {
+        vscode.window.showErrorMessage(e.message)
+      }
     }
   )
 

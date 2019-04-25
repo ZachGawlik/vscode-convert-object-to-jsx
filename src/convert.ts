@@ -9,24 +9,20 @@ import convertJsxToObject from './convertJsxToObject'
 import convertObjectToJsx from './convertObjectToJsx'
 
 const isObjectFormat = (text: string) => {
-  const keyIndentation = getBeginningWhitespace(text).length
-  const leftmostIndentedKey = getEntryStartRegex(keyIndentation)
-  const leftmostIndentedProp = getPropStartRegex(keyIndentation)
-
-  // This is the only time where we're actually matching the "first" entry
-  // instead of immediately looking for the second one
-  // I don't think there's a case where the index should ever not be 0.
   const textToSearch = `\n${text}\n`
+  const keyIndentation = getBeginningWhitespace(text).length
 
-  const firstKey = textToSearch.search(leftmostIndentedKey)
-  const firstProp = textToSearch.search(leftmostIndentedProp)
-  if (firstKey === -1) {
-    return false
-  } else if (firstProp === -1) {
+  const firstKey = textToSearch.search(getEntryStartRegex(keyIndentation))
+  const firstProp = textToSearch.search(getPropStartRegex(keyIndentation))
+  if (firstKey === 0) {
     return true
+  } else if (firstProp === 0) {
+    return false
+  } else {
+    throw new Error(
+      'The first line of the selected code is not recognized to be an object entry nor jsx prop'
+    )
   }
-
-  return firstKey < firstProp
 }
 
 export type Settings = {
