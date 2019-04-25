@@ -5,6 +5,8 @@
 
 # Allow specific files
 !README.md
+!tslint.json
+!tsconfig.json
 
 # Allow specific directories
 !src/**/*.ts
