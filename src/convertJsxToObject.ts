@@ -5,24 +5,12 @@ import {
   isStringValue,
 } from './utils'
 
-const unwrapPropValue = (value: string) => {
-  if (isStringValue(value)) {
-    return value
-  }
-
-  if (value[0] === '{' && value[value.length - 1] === '}') {
-    return value.slice(1, value.length - 1)
-  }
-  throw new Error(
-    `Prop value ${JSON.stringify(value)} is neither a string nor expression`
-  )
-}
-
-const getProps = (text: string) => {
+const splitProps = (text: string) => {
   const propIndentation = getBeginningWhitespace(text).length
   const leftmostIndentedProp = getPropStartRegex(propIndentation)
 
   const props = []
+  // Lets us use trailing `\n` regex even for the final selected prop
   let textToSearch = `${text}\n`
   while (true) {
     const nextPropIndex = textToSearch.slice(1).search(leftmostIndentedProp) + 1
@@ -36,11 +24,23 @@ const getProps = (text: string) => {
   }
 }
 
+const unwrapPropValue = (value: string) => {
+  if (isStringValue(value)) {
+    return value
+  }
+
+  if (value[0] === '{' && value[value.length - 1] === '}') {
+    return value.slice(1, value.length - 1)
+  }
+  throw new Error(
+    `Prop value ${JSON.stringify(value)} is neither a string nor expression`
+  )
+}
+
 const handleHyphen = (key: string) =>
   key.indexOf('-') === -1 ? key : `'${key}'`
 
-// tslint:disable-next-line:variable-name
-const _propToObject = (prop: string) => {
+const propToObject = (prop: string) => {
   const separatorIndex = prop.indexOf('=')
 
   if (separatorIndex === -1) {
@@ -61,15 +61,13 @@ const _propToObject = (prop: string) => {
     : `${handleHyphen(key)}: ${formattedValue},`
 }
 
-const propToObject = (prop: string) => {
-  return (
-    getBeginningWhitespace(prop) +
-    _propToObject(prop.trim()) +
-    getEndingWhitespace(prop)
-  )
-}
-
-export default (textWithoutNewlines: string) => {
-  const props = getProps(textWithoutNewlines)
-  return props.map(propToObject).join('')
+export default (text: string) => {
+  return splitProps(text)
+    .map(
+      (prop: string) =>
+        getBeginningWhitespace(prop) +
+        propToObject(prop.trim()) +
+        getEndingWhitespace(prop)
+    )
+    .join('')
 }

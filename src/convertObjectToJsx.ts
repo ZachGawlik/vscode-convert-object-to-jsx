@@ -5,18 +5,13 @@ import {
   isStringValue,
 } from './utils'
 
-// Lets us use `,\n` even on the final entry
-const sanitizeText = (text: string) => {
-  return text[text.length - 1] === ',' ? `${text}\n` : `${text},\n`
-}
-
-const getEntries = (text: string) => {
-  // is really just looking for spaces. No newlines are here.
+const splitEntries = (text: string) => {
   const keyIndentation = getBeginningWhitespace(text).length
   const leftmostIndentedKey = getEntryStartRegex(keyIndentation)
 
   const entries = []
-  let textToSearch = sanitizeText(text)
+  // Lets us use `,\n` regex even on the final selected entry
+  let textToSearch = text[text.length - 1] === ',' ? `${text}\n` : `${text},\n`
   while (true) {
     const nextKeyIndex = textToSearch.slice(1).search(leftmostIndentedKey) + 1
 
@@ -42,9 +37,8 @@ const wrapPropValue = (untrimmedValue: string) => {
   )
   const trimmedValue = untrimmedValue.trimLeft()
   if (isStringValue(trimmedValue)) {
-    const stringNoWrappedQuotes = trimmedValue.slice(1, trimmedValue.length - 1)
-    // prettier-ignore
-    const escapedString = stringNoWrappedQuotes
+    const stringContent = trimmedValue.slice(1, trimmedValue.length - 1)
+    const escapedString = stringContent
       .replace(/\\\'/g, "'")
       .replace(/"/g, '\\"')
     return `${beginningWhitespace}"${escapedString}"`
@@ -53,11 +47,7 @@ const wrapPropValue = (untrimmedValue: string) => {
   return `{${beginningWhitespace}${trimmedValue}}`
 }
 
-// tslint:disable-next-line:variable-name
-const _jsxifyEntry = (entry: string, useJsxShorthand: boolean) => {
-  // preserves newlines between object entries
-  // could drop that requirement if it simplifies anything
-  // realistically, we just need the same amount of spaces as our first one
+const jsxifyEntry = (entry: string, useJsxShorthand: boolean) => {
   if (entry.indexOf('...') === 0) {
     return `{${entry}}`
   }
@@ -75,7 +65,6 @@ const _jsxifyEntry = (entry: string, useJsxShorthand: boolean) => {
     return stripQuotesForHyphen(key)
   }
 
-  // value is already trimmed right.
   return `${stripQuotesForHyphen(key)}=${wrapPropValue(value)}`
 }
 
@@ -83,18 +72,13 @@ const cleanUpTrailingComma = (s: string) => {
   return s[s.length - 1] === ',' ? s.slice(0, s.length - 1) : s
 }
 
-const jsxifyEntry = (untrimmedEntry: string, useJsxShorthand: boolean) => {
-  return (
-    getBeginningWhitespace(untrimmedEntry) +
-    _jsxifyEntry(cleanUpTrailingComma(untrimmedEntry.trim()), useJsxShorthand) +
-    getEndingWhitespace(untrimmedEntry)
-  )
-}
-
-export default (textWithoutNewlines: string, useJsxShorthand: boolean) => {
-  const objectEntries = getEntries(textWithoutNewlines)
-
-  return objectEntries
-    .map(entry => jsxifyEntry(entry, useJsxShorthand))
+export default (text: string, useJsxShorthand: boolean) => {
+  return splitEntries(text)
+    .map(
+      (entry: string) =>
+        getBeginningWhitespace(entry) +
+        jsxifyEntry(cleanUpTrailingComma(entry.trim()), useJsxShorthand) +
+        getEndingWhitespace(entry)
+    )
     .join('')
 }
