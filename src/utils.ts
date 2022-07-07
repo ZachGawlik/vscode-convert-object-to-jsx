@@ -13,9 +13,9 @@ export const isStringValue = (trimmedString: string) =>
   [`'`, `"`].indexOf(trimmedString[0]) !== -1
 
 export const getEntryStartRegex = (keyIndentation: number) => {
-  const standardKeyRegex = `\\n {${keyIndentation}}[\`'"-\\w]+:`
-  const shorthandPropRegex = `\\n {${keyIndentation}}\\w+,\n`
-  const spreadRegex = `\\n {${keyIndentation}}\\.\\.\\.\\w+`
+  const standardKeyRegex = `\\n\\s{${keyIndentation}}[\`'"-\\w]+:`
+  const shorthandPropRegex = `\\n\\s{${keyIndentation}}\\w+,\n`
+  const spreadRegex = `\\n\\s{${keyIndentation}}\\.\\.\\.\\w+`
   return new RegExp(
     `(${standardKeyRegex}|${spreadRegex}|${shorthandPropRegex})`,
     'g'
@@ -23,9 +23,9 @@ export const getEntryStartRegex = (keyIndentation: number) => {
 }
 
 export const getPropStartRegex = (propIndentation: number) => {
-  const standardPropRegex = `\\n {${propIndentation}}[\\w-]+=`
-  const booleanShorthandRegex = `\\n {${propIndentation}}[\\w-]+\\n`
-  const spreadRegex = `\\n {${propIndentation}}\\{\\.\\.\\.\\w+`
+  const standardPropRegex = `\\n\\s{${propIndentation}}[\\w-]+=`
+  const booleanShorthandRegex = `\\n\\s{${propIndentation}}[\\w-]+\\n`
+  const spreadRegex = `\\n\\s{${propIndentation}}\\{\\.\\.\\.\\w+`
   return new RegExp(
     `(${standardPropRegex}|${booleanShorthandRegex}|${spreadRegex})`,
     'g'

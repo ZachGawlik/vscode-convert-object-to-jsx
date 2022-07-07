@@ -3,7 +3,7 @@
   "displayName": "Convert Object to JSX",
   "description": "Convert between object entry and jsx prop formats",
   "publisher": "zachgawlik",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "engines": {
     "vscode": "^1.30.0"
   },
