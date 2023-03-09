@@ -22,7 +22,7 @@
 
 "@types/node@^16.x.x":
   version "16.11.43"
-  resolved "https://na.artifactory.swg-devops.com/artifactory/api/npm/sec-cloud-identity-common-dev-npm-virtual/@types/node/-/node-16.11.43.tgz?dl=https%3A%2F%2Fregistry.npmjs.org%2F%40types%2Fnode%2F-%2Fnode-16.11.43.tgz#555e5a743f76b6b897d47f945305b618525ddbe6"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.11.43.tgz?dl=https%3A%2F%2Fregistry.npmjs.org%2F%40types%2Fnode%2F-%2Fnode-16.11.43.tgz#555e5a743f76b6b897d47f945305b618525ddbe6"
   integrity sha512-GqWykok+3uocgfAJM8imbozrqLnPyTrpFlrryURQlw1EesPUCx5XxTiucWDSFF9/NUEXDuD4bnvHm8xfVGWTpQ==
 
 "@types/normalize-package-data@^2.4.0":
@@ -32,7 +32,7 @@
 
 "@types/vscode@^1.68.1":
   version "1.68.1"
-  resolved "https://na.artifactory.swg-devops.com/artifactory/api/npm/sec-cloud-identity-common-dev-npm-virtual/@types/vscode/-/vscode-1.68.1.tgz?dl=https%3A%2F%2Fregistry.npmjs.org%2F%40types%2Fvscode%2F-%2Fvscode-1.68.1.tgz#a9e5b33f825f715cae80593cb6d5d6d4cabbe998"
+  resolved "https://registry.yarnpkg.com/@types/vscode/-/vscode-1.68.1.tgz?dl=https%3A%2F%2Fregistry.npmjs.org%2F%40types%2Fvscode%2F-%2Fvscode-1.68.1.tgz#a9e5b33f825f715cae80593cb6d5d6d4cabbe998"
   integrity sha512-fXlaq13NT5yHh6yZ3c+UxXloTSk34mIvsNFYyQCeO5Po2BLFAwz7EZT4kQ43B64/aPcnAenyWy3QasrTofBOnQ==
 
 abab@^2.0.0:
@@ -3580,7 +3580,7 @@ type-fest@^0.4.1:
 
 typescript@^4.7.4:
   version "4.7.4"
-  resolved "https://na.artifactory.swg-devops.com/artifactory/api/npm/sec-cloud-identity-common-dev-npm-virtual/typescript/-/typescript-4.7.4.tgz?dl=https%3A%2F%2Fregistry.npmjs.org%2Ftypescript%2F-%2Ftypescript-4.7.4.tgz#1a88596d1cf47d59507a1bcdfb5b9dfe4d488235"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.7.4.tgz?dl=https%3A%2F%2Fregistry.npmjs.org%2Ftypescript%2F-%2Ftypescript-4.7.4.tgz#1a88596d1cf47d59507a1bcdfb5b9dfe4d488235"
   integrity sha512-C0WQT0gezHuw6AdY1M2jxUO83Rjf0HP7Sk1DtXj6j1EwkQNZrHAg2XPWlq62oqEhYvONq5pkC2Y9oPljWToLmQ==
 
 uglify-js@^3.1.4:
