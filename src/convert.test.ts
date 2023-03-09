@@ -176,6 +176,13 @@ describe('convert', () => {
         '\n\n  data={123}\n\n  x={x}\n  y={y}\n'
       )
     })
+
+    it('handles leading tabs', () => {
+      testReversibleConversion(
+        '\n\n\tdata: 123,\n\n\tx,\n\ty,\n',
+        '\n\n\tdata={123}\n\n\tx={x}\n\ty={y}\n'
+      )
+    })
   })
 
   describe('invalid selections', () => {

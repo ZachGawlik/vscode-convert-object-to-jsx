@@ -33,7 +33,11 @@ export const activate = (context: vscode.ExtensionContext) => {
         })
         editor.edit(builder => builder.replace(fullLineSelection, converted))
       } catch (e) {
-        vscode.window.showErrorMessage(e.message)
+        if (e instanceof Error) {
+          vscode.window.showErrorMessage(e.message)
+        } else {
+          throw e
+        }
       }
     }
   )

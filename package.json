@@ -3,7 +3,7 @@
   "displayName": "Convert Object to JSX",
   "description": "Convert between object entry and jsx prop formats",
   "publisher": "zachgawlik",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "engines": {
     "vscode": "^1.30.0"
   },
@@ -76,14 +76,14 @@
     "vscode:prepublish": "yarn run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install",
     "test": "yarn run jest",
     "commit": "git-cz",
     "format": "yarn run prettier 'src/**/*.ts' README.md --write"
   },
   "devDependencies": {
     "@types/jest": "^23.3.13",
-    "@types/node": "^8.10.25",
+    "@types/node": "^16.x.x",
+    "@types/vscode": "^1.68.1",
     "commitizen": "^3.1.1",
     "cz-conventional-changelog": "^2.1.0",
     "husky": "^2.1.0",
@@ -93,7 +93,6 @@
     "tslint": "^5.8.0",
     "tslint-config-prettier": "^1.17.0",
     "tslint-plugin-prettier": "^2.0.1",
-    "typescript": "^3.1.4",
-    "vscode": "^1.1.25"
+    "typescript": "^4.7.4"
   }
 }
