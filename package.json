@@ -5,7 +5,7 @@
   "publisher": "zachgawlik",
   "version": "1.1.0",
   "engines": {
-    "vscode": "^1.30.0"
+    "vscode": "^1.68.1"
   },
   "keywords": [
     "jsx",
@@ -64,7 +64,7 @@
   "license": "MIT",
   "husky": {
     "hooks": {
-      "pre-commit": "yarn run test"
+      "pre-commit": "npm run test"
     }
   },
   "config": {
@@ -73,12 +73,12 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "yarn run compile",
+    "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "test": "yarn run jest",
+    "test": "jest",
     "commit": "git-cz",
-    "format": "yarn run prettier 'src/**/*.ts' README.md --write"
+    "format": "prettier 'src/**/*.ts' README.md --write"
   },
   "devDependencies": {
     "@types/jest": "^23.3.13",
