@@ -12,6 +12,7 @@ const splitEntries = (text: string) => {
   const entries = []
   // Lets us use `,\n` regex even on the final selected entry
   let textToSearch = text[text.length - 1] === ',' ? `${text}\n` : `${text},\n`
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     const nextKeyIndex = textToSearch.slice(1).search(leftmostIndentedKey) + 1
 
@@ -39,7 +40,7 @@ const wrapPropValue = (untrimmedValue: string) => {
   if (isStringValue(trimmedValue)) {
     const stringContent = trimmedValue.slice(1, trimmedValue.length - 1)
     const escapedString = stringContent
-      .replace(/\\\'/g, "'")
+      .replace(/\\'/g, "'")
       .replace(/"/g, '\\"')
     return `${beginningWhitespace}"${escapedString}"`
   }

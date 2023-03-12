@@ -26,7 +26,7 @@ describe('convert', () => {
       expect(convert(`trickychars=" ',\\"{<}>"`)).toEqual(
         `trickychars: " ',\\"{<}>",`
       )
-      expect(convert(`trickychars: ' \',"{<}>'`)).toEqual(
+      expect(convert(`trickychars: ' ',"{<}>'`)).toEqual(
         `trickychars=" ',\\"{<}>"`
       )
     })
@@ -57,9 +57,7 @@ describe('convert', () => {
     })
 
     test('Converts template literal value', () => {
-      /* tslint:disable:no-invalid-template-strings */
       testReversibleConversion('a: `string${id}`,', 'a={`string${id}`}')
-      /* tslint:enable:no-invalid-template-strings */
     })
 
     test('Converts field with an object value', () => {

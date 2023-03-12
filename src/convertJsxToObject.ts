@@ -12,6 +12,7 @@ const splitProps = (text: string) => {
   const props = []
   // Lets us use trailing `\n` regex even for the final selected prop
   let textToSearch = `${text}\n`
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     const nextPropIndex = textToSearch.slice(1).search(leftmostIndentedProp) + 1
 

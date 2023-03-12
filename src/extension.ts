@@ -15,11 +15,16 @@ export const activate = (context: vscode.ExtensionContext) => {
         return
       }
 
+      const activeTextEditor = vscode.window.activeTextEditor
+      if (!activeTextEditor) {
+        return
+      }
       const fullLineSelection = new vscode.Range(
         new vscode.Position(editor.selection.start.line, 0),
+
         new vscode.Position(
           editor.selection.end.line,
-          vscode.window.activeTextEditor!.document.lineAt(
+          activeTextEditor.document.lineAt(
             editor.selection.end.line
           ).text.length
         )
@@ -31,7 +36,11 @@ export const activate = (context: vscode.ExtensionContext) => {
             .getConfiguration()
             .get('convert-object-to-jsx.useJsxShorthand'),
         })
-        editor.edit(builder => builder.replace(fullLineSelection, converted))
+        if (converted) {
+          editor.edit((builder) =>
+            builder.replace(fullLineSelection, converted)
+          )
+        }
       } catch (e) {
         if (e instanceof Error) {
           vscode.window.showErrorMessage(e.message)
